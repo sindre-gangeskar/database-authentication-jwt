@@ -20,7 +20,11 @@ router.get('/add/:number1', async function (req, res, next) {
     const previous = await resultService.getOne(decodedToken.id);
     const result = previous.Value + number1;
     resultService.create('add', result, decodedToken.id);
-    res.jsend.success({ result: result, previousOperation: previous.OperationName, previousValue: previous.Value });
+    console.log(decodedToken);
+    if (previous.Value % decodedToken.email.length === 0)
+        return res.jsend.success('You are lucky');
+
+    return res.jsend.success({ result: result, previousOperation: previous.OperationName, previousValue: previous.Value });
 })
 
 router.get('/subtract/:number1', async function (req, res, next) {
