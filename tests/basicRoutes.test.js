@@ -7,11 +7,13 @@ const addRoutes = require('../routes/add');
 const subtractRoutes = require('../routes/subtract');
 const multiplyRoutes = require('../routes/multiply');
 const divideRoutes = require('../routes/divide');
+const sqrtRoutes = require('../routes/sqrt');
 
 app.use('/add', addRoutes);
 app.use('/subtract', subtractRoutes);
 app.use('/multiply', multiplyRoutes);
 app.use('/divide', divideRoutes);
+app.use('/sqrt', sqrtRoutes);
 
 
 describe("testing-guest-routes", () => {
@@ -81,6 +83,13 @@ describe("testing-guest-routes", () => {
             "data": {
                 number2: "number2 is not in correct format"
             }
+        })
+    })
+    test("GET /sqrt/4 - success", async () => {
+        const { body } = await request(app).get('/sqrt/4');
+        expect(body).toEqual({
+            "status": "success",
+            "data": 2
         })
     })
 });

@@ -38,4 +38,11 @@ describe('testing-guest-routes', () => {
         expect(body.data).toHaveProperty('result');
         expect(parseInt(body.data.result)).toBe(parseInt(body.data.previousValue) / 2);
     })
+    test('GET /previous/sqrt - success', async () => {
+        const { body } = await request(url).get('/previous/sqrt/2').set('Authorization', 'Bearer ' + token);
+        expect(body).toHaveProperty('data');
+        expect(body.data).toHaveProperty('previousValue');
+        expect(body.data).toHaveProperty('result');
+        expect(parseInt(body.data.result)).toBe(parseInt(Math.sqrt(body.data.previousValue)));
+    })
 })

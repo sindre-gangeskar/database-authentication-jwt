@@ -14,7 +14,7 @@ var subtractRouter = require('./routes/subtract');
 var divideRouter = require('./routes/divide');
 var multiplyRouter = require('./routes/multiply');
 var previousRouter = require('./routes/previous');
-
+var squareRootRouter = require('./routes/sqrt');
 const db = require('./models');
 db.sequelize.sync({ force: false });
 var app = express();
@@ -35,6 +35,8 @@ app.use('/subtract', subtractRouter);
 app.use('/divide', divideRouter);
 app.use('/multiply', multiplyRouter);
 app.use('/previous', previousRouter);
+app.use('/sqrt', squareRootRouter);
+
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 //#region Error Handling

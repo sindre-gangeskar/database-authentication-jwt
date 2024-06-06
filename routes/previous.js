@@ -117,6 +117,36 @@ router.get('/divide/:number1', async function (req, res, next) {
         res.jsend.success({ "result": Math.round(result), "previousOperation": previous.OperationName, "previousValue": previous.Value, "message": "Result has been rounded, as it was not an integer." });
     }
 })
+router.get('/sqrt/:number1', async function (req, res, next) {
+    //#region Swagger Setup
+    /* 
+        #swagger.tags = ['Previous Divide']
+        #swagger.description = "Pass in number1 in the endpoint and get sum back as a division with the use of the previous number passed in - must be logged in"
+    */
+    //#endregion
+    const number1 = parseInt(req.params.number1);
+    if (isNaN(number1)) return res.jsend.fail({ number1: 'number1 is not in correct format' });
+
+    const token = req.headers.authorization?.split(' ')[ 1 ];
+    if (!token) return res.jsend.fail('JWT token is invalid');
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    } catch (error) {
+        return res.jsend.fail({ result: error });
+    }
+
+    const previous = await resultService.getOne(decodedToken.id);
+    const result = Math.sqrt(previous.Value);
+    resultService.create('sqrt', result, decodedToken.id);
+    if (Number.isInteger(result)) {
+        res.jsend.success({ "result": result, "previousOperation": previous.OperationName, "previousValue": previous.Value });
+    }
+    else {
+        res.jsend.success({ "result": Math.round(result), "previousOperation": previous.OperationName, "previousValue": previous.Value, "message": "Result has been rounded, as it was not an integer." });
+    }
+})
 
 
 module.exports = router;
