@@ -9,7 +9,14 @@ const resultService = new ResultService(db);
 const jwt = require('jsonwebtoken');
 
 router.use(jsend.middleware);
+
 router.get('/:number1?/:number2?', function (req, res, next) {
+    //#region Swagger Setup
+    /* 
+        #swagger.tags = ['Multiply']
+        #swagger.description = "Pass in number1 and number2 in the endpoint and get sum back as a multiplication of the two numbers passed in"
+    */
+    //#endregion
     const { number1, number2 } = req.params;
     const result = parseInt(number1) * parseInt(number2);
     if (!number1 || !number2)
@@ -23,8 +30,13 @@ router.get('/:number1?/:number2?', function (req, res, next) {
 
     const token = req.headers.authorization?.split(' ')[ 1 ];
     if (token) {
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-        resultService.create('multiply', result, decodedToken.id);
+        try {
+            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+            resultService.create('multiply', result, decodedToken.id);
+        } catch (error) {
+            return res.jsend.success({ result: result, message: error });
+        }
+
     }
 
     return res.jsend.success(result);

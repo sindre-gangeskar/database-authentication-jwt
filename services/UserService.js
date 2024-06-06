@@ -15,6 +15,9 @@ class UserService {
             Salt: salt
         });
     }
+    async delete(email) {
+        await this.User.destroy({ where: { Email: email } });
+    }
 }
 
 module.exports = UserService;

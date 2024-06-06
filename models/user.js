@@ -6,7 +6,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         Email: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         EncryptedPassword: {
             type: Sequelize.BLOB,

@@ -1,0 +1,413 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Basic Calculator API",
+    "description": "Basic Calculator API with the option to use previous values if a user has been logged in with a JSON Web Token"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Sign up with email, password and name",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Name": {
+                  "example": "any"
+                },
+                "Email": {
+                  "example": "any"
+                },
+                "Password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Attempt to login with email and password - success is signed a JSON Web Token",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Email": {
+                  "example": "any"
+                },
+                "Password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/add/{number1}/{number2}": {
+      "get": {
+        "tags": [
+          "Add"
+        ],
+        "description": "Add two numbers",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "First number",
+            "example": 1
+          },
+          {
+            "name": "number2",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Second number",
+            "example": 2
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Authorization token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "integer"
+                        },
+                        "example": {
+                          "type": "number",
+                          "example": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "fail"
+                        }
+                      }
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "example": {
+                          "type": "string",
+                          "example": "Need two values, e.g add/1/2"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subtract/{number1}/{number2}": {
+      "get": {
+        "tags": [
+          "Subtract"
+        ],
+        "description": "Pass in number1 and number2 in the endpoint and get sum back as a subraction of the two numbers passed in",
+        "parameters": [
+          {
+            "name": "number1?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "number2?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/divide/{number1}/{number2}": {
+      "get": {
+        "tags": [
+          "Divide"
+        ],
+        "description": "Pass in number1 and number2 in the endpoint and get sum back as a division of the two numbers passed in",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "number2",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/multiply/{number1}/{number2}": {
+      "get": {
+        "tags": [
+          "Multiply"
+        ],
+        "description": "Pass in number1 and number2 in the endpoint and get sum back as a multiplication of the two numbers passed in",
+        "parameters": [
+          {
+            "name": "number1?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "number2?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/previous/add/{number1}": {
+      "get": {
+        "tags": [
+          "Previous Add"
+        ],
+        "description": "Pass in number1 in the endpoint and get sum back as an addition with the use of the previous number passed in - must be logged in",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/previous/subtract/{number1}": {
+      "get": {
+        "tags": [
+          "Previous Subtract"
+        ],
+        "description": "Pass in number1 in the endpoint and get sum back as a subtraction with the use of the previous number passed in - must be logged in",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/previous/multiply/{number1}": {
+      "get": {
+        "tags": [
+          "Previous Multiply"
+        ],
+        "description": "Pass in number1 in the endpoint and get sum back as an multiplication with the use of the previous number passed in - must be logged in",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/previous/divide/{number1}": {
+      "get": {
+        "tags": [
+          "Previous Divide"
+        ],
+        "description": "Pass in number1 in the endpoint and get sum back as a division with the use of the previous number passed in - must be logged in",
+        "parameters": [
+          {
+            "name": "number1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Add": {
+      "type": "object",
+      "properties": {
+        "number1": {
+          "type": "number",
+          "example": 1
+        },
+        "number2": {
+          "type": "number",
+          "example": 2
+        }
+      }
+    }
+  }
+}

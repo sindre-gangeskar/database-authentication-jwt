@@ -10,8 +10,13 @@ const jwt = require('jsonwebtoken');
 
 router.use(jsend.middleware);
 router.get('/:number1?/:number2?', function (req, res, next) {
-    const number1 = parseInt(req.params.number1);
-    const number2 = parseInt(req.params.number2);
+    //#region Swagger Setup
+    /* 
+        #swagger.tags = ['Subtract']
+        #swagger.description = "Pass in number1 and number2 in the endpoint and get sum back as a subraction of the two numbers passed in"
+    */
+    //#endregion
+    const { number1, number2 } = req.params;
     const result = number1 - number2;
 
     if (!number1 || !number2)
@@ -22,11 +27,16 @@ router.get('/:number1?/:number2?', function (req, res, next) {
 
     if (isNaN(number2))
         return res.jsend.fail({ number2: 'number2 is not in correct format' });
-   
+
     const token = req.headers.authorization?.split(' ')[ 1 ];
     if (token) {
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-        resultService.create('subtract', result, decodedToken.id);
+        try {
+            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+            resultService.create('subtract', result, decodedToken.id);
+        } catch (error) {
+            return res.jsend.success({ result: result, message: error });
+        }
+   
     }
 
     return res.jsend.success(result);
